@@ -8,7 +8,7 @@ listen = False
 command = False
 upload = False
 execute = ""
-terget = ""
+target = ""
 upload_destination = ""
 port = 0
 
@@ -34,7 +34,7 @@ def main():
     global port
     global execute
     global command
-    global uploa_destination
+    global upload_destination
     global target
 
     if not len(sys.argv[1:]):
@@ -44,7 +44,7 @@ def main():
         opts, args = getopt.getopt(sys.argv[1:], "hle:t:p:cu:",
         ["help", "listen", "execute", "target", "port", "command", "upload"])
     except getopt.GetoptError as err:
-        print (srt(err))
+        print (str(err))
         usage()
 
     for o,a in opts:
@@ -126,7 +126,7 @@ def client_handler(client_socket):
     global execute
     global command
 
-    if len(uploa_destination):
+    if len(upload_destination):
         file_buffer = ""
         while True:
             data = client_socket.recv(1024)
@@ -137,13 +137,13 @@ def client_handler(client_socket):
                 file_buffer += data
 
         try:
-            file_descriptor = open(uploa_destination,"wb")
+            file_descriptor = open(upload_destination,"wb")
             file_descriptor.write(file_buffer)
             file_descriptor.close()
 
-            client_socket.send("successfully save file to %s\r\n" % uploa_destination)
+            client_socket.send("successfully save file to %s\r\n" % upload_destination)
         except:
-            client_socket.send("failed to save file to %s\r\n" % uploa_destination)
+            client_socket.send("failed to save file to %s\r\n" % upload_destination)
 
     if len(execute):
         output = run_command(execute)
